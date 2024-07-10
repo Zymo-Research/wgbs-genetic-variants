@@ -18,6 +18,19 @@ samtools index calmd.bam
 ./revelio.py sample_1_calmd.bam sample_1_masked.bam
 samtools index sample_1_masked.bam
 ```
+## WGS variant calling with Sarek using Freebayes
+1)	Sequencing quality control and trimming of raw fastq files using FASTQC and FASTP
+2)	Map reads to reference using BWAMEM1
+3)	Process BAM file (GATKMarkduplicates)
+4)	Call variants using the Freebayes variant caller (SNPs and Indels)
+```
+nextflow run /home/.nextflow/assets/nf-core/sarek/main.nf  --input /home/sarek/in4276_freebayes_wgs//home/hpatel/sarek/in4319/in4319_input.csv -profile awsbatch --awsregion us-east-1 --awsqueue 'arn:aws:batch:us-east-1:002226384833:job-queue/methylseq'  --step variant_calling --outdir 's3://zymo-filesystem/home/hpatel/sarek/in4319_wgs_freebayes/' -w 's3://zymo-filesystem/tmp/hpatel/in4319_work/' --genome null --igenomes_ignore --fasta 's3://zymo-filesystem/home/hpatel/reference_genomes/GIAB/GRCh38_GIABv3_no_alt_analysis_set_maskedGRC_decoys_MAP2K3_KMT2C_KCNJ18.fasta' --skip_tools baserecalibrator --tools freebayes
+```
+5)	Filtering VCF file to retain high-quality variants. QUAL > 30 and DP > 10 seem to be optimal for filtering.
+
+`bcftools filter -i 'QUAL > 30 && FORMAT/DP > 10' -O z -o "$output_dir/filtered1.vcf.gz" "$input_file1"`
+
+
 
 ## Instructions for Accuracy (Precision/Recall) Analysis of GIAB Sample
 
