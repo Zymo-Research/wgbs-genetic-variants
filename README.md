@@ -6,6 +6,18 @@ Instructions for genetic variant detection from whole genome bisulfite sequencin
 ## Results of Our Accuracy Analysis
 
 ## Instructions for Running Revelio
+**refer to [Revelio's repository](https://github.com/bio15anu/revelio) for installation instructions**
+
+**generate MD tags based on sample bam and reference genome fasta**
+```
+samtools calmd -b sample_1.bam genome.fa 1> sample_1_calmd.bam 2> /dev/null
+samtools index calmd.bam
+```
+**generate masked bam**
+```
+./revelio.py sample_1_calmd.bam sample_1_masked.bam
+samtools index sample_1_masked.bam
+```
 
 ## Instructions for Accuracy (Precision/Recall) Analysis of GIAB Sample
 
