@@ -1,11 +1,17 @@
-# wgbs-genetic-variants
-Instructions for genetic variant detection from whole genome bisulfite sequencing (WGBS) data
+# Variant Calling from Whole Genome Bisulfite Sequencing Data (WGBS): From FASTQ to VCF
 
-## Introduction
+This tutorial provides a step-by-step guide on how to perform variant calling on Whole Genome Bisulfite Sequencing (WGBS) data, from BAM files to obtaining a VCF file. We will use the following tools:
 
-## Results of Our Accuracy Analysis
+1. **Revelio** to convert WGBS BAM files to genomics-compatible BAM files.
+2. **FreeBayes** for variant calling.
 
-## Instructions for Running Revelio
+For the purposes of this tutorial, we already assume your WGBS data has been appropriately trimmed, aligned (for example, using a tool such as Bismark), and QC-checked. We will begin with an aligned BAM file and demonstrate how to obtain called variants in a VCF (Variant Call Format) file.
+
+## Conceptual Introduction
+
+We have elected to use a tool called Revelio, which transforms a BAM file from WGBS data into one that is compatible with the same tools as any genomics analysis. The advantage is that standard variant calling tools can now be used on WGBS data. Also, if a researcher is performing both WGBS and whole genome sequencing (WGS, or DNA-seq), the same variant calling pipeline could be used to compare between the datasets. Revelio achieves this by transforming quality scores based on the likelihood that a C->T conversion is due to a genetic change or a bisulfite conversion. It is able to do this, for stranded (directional), WGBS libraries by leveraging unconverted information present on the second strand. The quality score conversion will effectively mask any bisulfite conversion events, but will allow the variant caller to analyze any other mutation events. See the Revelio publication for more information on how the algorithm works.
+
+## Step 1: Running Revelio
 **refer to [Revelio's repository](https://github.com/bio15anu/revelio) for installation instructions**
 
 **generate MD tags based on sample bam and reference genome fasta**
@@ -18,7 +24,7 @@ samtools index calmd.bam
 ./revelio.py sample_1_calmd.bam sample_1_masked.bam
 samtools index sample_1_masked.bam
 ```
-## WGS variant calling with Sarek using Freebayes
+## Step 2: WGS variant calling with Sarek using Freebayes
 1)	Sequencing quality control and trimming of raw fastq files using FASTQC and FASTP
 2)	Map reads to reference using BWAMEM1
 3)	Process BAM file (GATKMarkduplicates)
@@ -42,54 +48,8 @@ nextflow run /home/.nextflow/assets/nf-core/sarek/main.nf  \
 
 `bcftools filter -i 'QUAL > 30 && FORMAT/DP > 10' -O z -o "$output_dir/filtered1.vcf.gz" "$input_file1"`
 
+## Notes
 
-
-## Instructions for Accuracy (Precision/Recall) Analysis of GIAB Sample
-
-**GIAB HG38 Fasta:**
-
-Make the fai file with `samtools faidx`
-
-[https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/references/GRCh38/GRCh38\_GIABv3\_no\_alt\_analysis\_set\_maskedGRC\_decoys\_MAP2K3\_KMT2C\_KCNJ18.fasta.gz](https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/references/GRCh38/GRCh38_GIABv3_no_alt_analysis_set_maskedGRC_decoys_MAP2K3_KMT2C_KCNJ18.fasta.gz "‌")
-
-**precisionFDA truth dataset for HG001 (VCF + stratification BED):**
-
-[https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/NA12878_HG001/NISTv3.3.2/GRCh38/](https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release/NA12878_HG001/NISTv3.3.2/GRCh38/ "smartCard-inline")
-
-[**rep.py**](http://rep.py "‌")**:**
-
-Must run with python2 + jinja2.
-
-[https://github.com/ga4gh/benchmarking-tools/blob/master/reporting/basic/bin/rep.py](https://github.com/ga4gh/benchmarking-tools/blob/master/reporting/basic/bin/rep.py "smartCard-inline")
-
-sample command:
-
-```
-python /home/mjin/scratch/projects/GIAB_Fixture/benchmarking-tools/reporting/basic/bin/rep.py \
-  in4307-1_hap.py:../happy/in4307_1.roc.all.csv.gz \
-  in4307-2_hap.py:../happy/in4307_2.roc.all.csv.gz \
-  in4307-3_hap.py:../happy/in4307_3.roc.all.csv.gz \
-  in4307-4_hap.py:../happy/in4307_4.roc.all.csv.gz \
-  in4307-5_hap.py:../happy/in4307_5.roc.all.csv.gz \
-  in4307-6_hap.py:../happy/in4307_6.roc.all.csv.gz \
-  in4307-7_hap.py:../happy/in4307_7.roc.all.csv.gz \
-  in4307-8_hap.py:../happy/in4307_8.roc.all.csv.gz \
-  -o comparisons.html
-```
-
-[**hap.py**](http://hap.py "‌")**:**
-
-Don’t install the program from bioconda. It won’t work because of incompatible C compiler. Use the docker container:
-
-`docker run -it --rm -v <host>:<container> quay.io/biocontainers/hap.py:0.3.15--py27hcb73b3d_0 bash`
-
-sample command (inside container):
-
-```
-hap.py \
-  ./GIAB_Fixture/HG001_GRCh38_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-10X-SOLID_CHROM1-X_v.3.3.2_highconf_PGandRTGphasetransfer.vcf.gz \
-  ../variant/in4307_1.deepvariant.vcf.gz \
-  -f ./GIAB_Fixture/HG001_GRCh38_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-10X-SOLID_CHROM1-X_v.3.3.2_highconf_nosomaticdel_noCENorHET7.bed \
-  -r ./GIAB_Fixture/GRCh38_GIABv3_no_alt_analysis_set_maskedGRC_decoys_MAP2K3_KMT2C_KCNJ18.fasta \
-  -o in4307_1
-```
+- Ensure all tools are properly installed and accessible in your PATH.
+- Adjust file paths and parameters as necessary for your specific data and computational environment.
+- The quality of the input data and the parameters used for alignment and variant calling can significantly affect the results.
