@@ -11,19 +11,33 @@ For the purposes of this tutorial, we already assume your WGBS data has been app
 
 We have elected to use a tool called Revelio, which transforms a BAM file from WGBS data into one that is compatible with the same tools as any genomics analysis. The advantage is that standard variant calling tools can now be used on WGBS data. Also, if a researcher is performing both WGBS and whole genome sequencing (WGS, or DNA-seq), the same variant calling pipeline could be used to compare between the datasets. Revelio achieves this by transforming quality scores based on the likelihood that a C->T conversion is due to a genetic change or a bisulfite conversion. It is able to do this, for stranded (directional), WGBS libraries by leveraging unconverted information present on the second strand. The quality score conversion will effectively mask any bisulfite conversion events, but will allow the variant caller to analyze any other mutation events. See the Revelio publication for more information on how the algorithm works.
 
-## Step 1: Running Revelio
-**Refer to [Revelio's repository](https://github.com/bio15anu/revelio) for installation instructions**
+## Conventions
 
-**Generate MD tags based on sample BAM and reference genome FASTA**
+In the example below, we will call the input BAM file `sample.bam`. We will continue to label the resulting files as simply "sample". For your purposes, please replace this with the name of your actual BAM file name and sample name that you are processing. We will also call the reference genome this BAM file was aligned to `genome.fa`. Please replace `genome.fa` with the FASTA file for the reference genome you are using.
+
+## Step 1: Running Revelio
+
+### Installation of Revelio and Samtools
+
+Refer to [Revelio's repository](https://github.com/bio15anu/revelio) for installation instructions.
+
+Refer to [Samtools's website](https://www.htslib.org/) for installation instructions.
+
+### Prepare BAM File
+
+Generate MD tags based on sample BAM and reference genome FASTA.
+
+```bash
+samtools calmd -b sample.bam genome.fa 1> sample_calmd.bam 2> /dev/null
+samtools index sample_calmd.bam
 ```
-samtools calmd -b sample_1.bam genome.fa 1> sample_1_calmd.bam 2> /dev/null
-samtools index calmd.bam
+
+### Generated Masked BAM
+```bash
+./revelio.py sample_calmd.bam sample_masked.bam
+samtools index sample_masked.bam
 ```
-**Generate masked BAM**
-```
-./revelio.py sample_1_calmd.bam sample_1_masked.bam
-samtools index sample_1_masked.bam
-```
+
 ## Step 2: WGS variant calling with Sarek using Freebayes
 **Call variants using the Freebayes variant caller (SNPs and Indels)**
 ```
