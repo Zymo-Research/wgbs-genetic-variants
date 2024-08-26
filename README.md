@@ -117,7 +117,7 @@ For this tutorial, we demonstrate variant calling using Freebayes, but note that
 Now we can call variants from the Revelio-masked BAM using the Freebayes variant caller. See the [Freebayes documentation](https://github.com/freebayes/freebayes) for additional options, as variant calling procedures often need to be fine-tuned for specific datasets and needs. In this case, we specifically compress and index the VCF file as well to save disk space and be compatible with downstream tools.
 ```bash
 freebayes -f genome.fa sample_masked_sorted.bam | bgzip -c > variants.vcf.gz
-tabix -p vcf variants16.vcf.gz
+tabix -@ $NUM_CORES -p vcf variants.vcf.gz
 ```
 
 ### Quality Filtering
