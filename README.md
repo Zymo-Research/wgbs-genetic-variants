@@ -121,10 +121,12 @@ tabix -@ $NUM_CORES -p vcf variants.vcf.gz
 ```
 
 ### Quality Filtering
-It is generally desirable to perform filtering on the VCF file to retain high-quality variants. Adjust this filtering based on your needs. In this case, we used QUAL > 30 and DP > 10 for quality filtering filtering. Please see the [`bcftools` documentation](https://samtools.github.io/bcftools/bcftools.html#filter) for more information about filtering options. What we have provided here is just an illustrative example. Note there is a difference between "hard filtering" (removing variants from the VCF itself) and "soft filtering" (flagging but not removing variants that do not pass the filter). For simplicity, we've show hard filtering here.
+It is generally desirable to perform filtering on the VCF file to retain high-quality variants. Adjust this filtering based on your needs. In this case, we used QUAL > 30 (quality score from the variant caller, PHRED-scaled) and DP > 10 (sequencing depth at the position, in reads) for quality filtering filtering. Please see the [`bcftools` documentation](https://samtools.github.io/bcftools/bcftools.html#filter) for more information about filtering options. What we have provided here is just an illustrative example. Note there is a difference between "hard filtering" (removing variants from the VCF itself) and "soft filtering" (flagging but not removing variants that do not pass the filter). For simplicity, we've show hard filtering here.
 
 ```bash
-bcftools filter -i 'QUAL > 30 && FORMAT/DP > 10' -O z -o "$output_dir/filtered1.vcf.gz" "$input_file1"`
+bcftools filter -i 'QUAL>30 && FORMAT/DP>10' -Oz -o variants_filtered.vcf.gz variants.vcf.gz
+bcftools index --threads $NUM_CORES variants_filtered.vcf.gz
+
 ```
 
 ## Notes
