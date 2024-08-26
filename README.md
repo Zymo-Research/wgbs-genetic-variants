@@ -77,7 +77,7 @@ samtools faidx genome.fa
 
 Then, generate MD tags based on sample BAM and reference genome FASTA. This pre-processing is necessary for Revelio to run most efficiently, as it no longer requires access to the reference genome FASTA file once MD tags have been generated.
 ```bash
-samtools calmd -b sample.bam genome.fa > sample_calmd.bam
+samtools calmd -b sample.bam genome.fa 1> sample_calmd.bam 2> /dev/null
 samtools index sample_calmd.bam
 ```
 
