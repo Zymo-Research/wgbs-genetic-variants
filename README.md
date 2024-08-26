@@ -50,8 +50,10 @@ Installation of dependencies.
 ```bash
 conda install samtools
 conda install -c bioconda pysam
-conda install -c bioconda freebayes
+conda install -c bioconda freebayes=1.3.6
 ```
+
+Note we have requested a specific version of `freebayes` as we encountered runtime errors with version 1.3.7 at time of writing.
 
 Also, fetch the source code for Revelio from the official GitHub repository. Make sure you are in the working directory you want use for your analysis when you do this.
 ```bash
@@ -66,6 +68,14 @@ git clone https://github.com/bio15anu/revelio.git
 
 * Refer to [Freebayes's website](https://github.com/freebayes/freebayes) for installation instructions.
 
+### Set Number of CPU Cores
+
+Various tools will require an argument for the number of CPU cores you wish to use. We will use an environment variable to pass this value in our example. If you wish to do the same, please set this variable, replacing `<num_cores>` with the number of CPU cores you wish to use.
+
+```bash
+export NUM_CORES=<num_cores>
+```
+
 ## Step 2: Running Revelio
 
 ### Prepare BAM File
@@ -77,8 +87,8 @@ samtools faidx genome.fa
 
 Then, generate MD tags based on sample BAM and reference genome FASTA. This pre-processing is necessary for Revelio to run most efficiently, as it no longer requires access to the reference genome FASTA file once MD tags have been generated.
 ```bash
-samtools calmd -b sample.bam genome.fa 1> sample_calmd.bam 2> /dev/null
-samtools index sample_calmd.bam
+samtools calmd -@ $NUM_CORES -b sample.bam genome.fa 1> sample_calmd.bam 2> /dev/null
+samtools index -@ $NUM_CORES sample_calmd.bam
 ```
 
 ### Generated Masked BAM
@@ -87,8 +97,16 @@ Replace `<num_threads>` with the number of CPU cores available on your machine (
 
 ```bash
 mkdir tmp
-./revelio/revelio.py --threads <num_threads> --temp tmp/ sample_calmd.bam sample_masked.bam
-samtools index sample_masked.bam
+./revelio/revelio.py --threads $NUM_CORES --temp tmp/ sample_calmd.bam sample_masked.bam
+samtools index -@ $NUM_CORES sample_masked.bam
+```
+
+### Sort the BAM file
+
+Variant callers (including Freebayes) often require BAMs that have been coordinate sorted. To ensure our BAM is properly sorted, we will perform sorting first. Again, replace <num_threads> with the number of CPU cores you wish to use.
+
+```bash
+samtools sort -@ $NUM_CORES -o sample_masked_sorted.bam sample.bam
 ```
 
 ## Step 3: Variant Calling using Freebayes
@@ -96,9 +114,10 @@ samtools index sample_masked.bam
 For this tutorial, we demonstrate variant calling using Freebayes, but note that you can choose another variant caller.
 
 ### Running Freebayes
-Now we can call variants from the Revelio-masked BAM using the Freebayes variant caller. See the [Freebayes documentation](https://github.com/freebayes/freebayes) for additional options, as variant calling procedures often need to be fine-tuned for specific datasets and needs.
+Now we can call variants from the Revelio-masked BAM using the Freebayes variant caller. See the [Freebayes documentation](https://github.com/freebayes/freebayes) for additional options, as variant calling procedures often need to be fine-tuned for specific datasets and needs. In this case, we specifically compress and index the VCF file as well to save disk space and be compatible with downstream tools.
 ```bash
-freebayes -f genome.fa sample_masked.bam > variants.vcf
+freebayes -f genome.fa sample_masked_sorted.bam | bgzip -c > variants.vcf.gz
+tabix -p vcf variants16.vcf.gz
 ```
 
 ### Quality Filtering
