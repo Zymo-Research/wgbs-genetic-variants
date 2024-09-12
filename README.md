@@ -139,31 +139,31 @@ bcftools index --threads $NUM_CORES variants_filtered.vcf.gz
 
 ### Tools Used or Mentioned in This How To
 
-VCF file format used as the output:
+**VCF** file format used as the output:
 
 * Danecek, Petr, Adam Auton, Goncalo Abecasis, Cornelis A. Albers, Eric Banks, Mark A. DePristo, Robert E. Handsaker, et al. 2011. “The Variant Call Format and VCFtools.” Bioinformatics (Oxford, England) 27 (15): 2156–58. [[link]](https://doi.org/10.1093/bioinformatics/btr330)
 
-nf-core Project recommended for a pre-processing pipeline for WGBS data:
+**nf-core** Project recommended for a pre-processing pipeline for WGBS data:
 
 * Ewels, Philip A., Alexander Peltzer, Sven Fillinger, Harshil Patel, Johannes Alneberg, Andreas Wilm, Maxime Ulysse Garcia, Paolo Di Tommaso, and Sven Nahnsen. 2020. “The Nf-Core Framework for Community-Curated Bioinformatics Pipelines.” Nature Biotechnology 38 (3): 276–78. [[link]](https://doi.org/10.1038/s41587-020-0439-x)
 
-FreeBayes used for variant calling on the Revelio-processed BAM file:
+**FreeBayes** used for variant calling on the Revelio-processed BAM file:
 
 * Garrison, Erik, and Gabor Marth. 2012. “Haplotype-Based Variant Detection from Short-Read Sequencing.” arXiv. [[link]](https://doi.org/10.48550/arXiv.1207.3907)
 
-Bioconda Project recommended for dependency management:
+**Bioconda** Project recommended for dependency management:
 
 * Grüning, Björn, Ryan Dale, Andreas Sjödin, Brad A. Chapman, Jillian Rowe, Christopher H. Tomkins-Tinch, Renan Valieris, Johannes Köster, and Bioconda Team. 2018. “Bioconda: Sustainable and Comprehensive Software Distribution for the Life Sciences.” Nature Methods 15 (7): 475–76. [[link]](https://doi.org/10.1038/s41592-018-0046-7)
 
-bismark Aligner recommended for WGBS alignment:
+**bismark** Aligner recommended for WGBS alignment:
 
 * Krueger, Felix, and Simon R. Andrews. 2011. “Bismark: A Flexible Aligner and Methylation Caller for Bisulfite-Seq Applications.” Bioinformatics (Oxford, England) 27 (11): 1571–72. [[link]](https://doi.org/10.1093/bioinformatics/btr167)
 
-samtools used for general BAM file processing:
+**samtools** used for general BAM file processing:
 
 * Li, Heng, Bob Handsaker, Alec Wysoker, Tim Fennell, Jue Ruan, Nils Homer, Gabor Marth, Goncalo Abecasis, Richard Durbin, and 1000 Genome Project Data Processing Subgroup. 2009. “The Sequence Alignment/Map Format and SAMtools.” Bioinformatics (Oxford, England) 25 (16): 2078–79. [[link]](https://doi.org/10.1093/bioinformatics/btp352)
 
-Revelio used to process WGBS BAM file to be compatible with variant calling software:
+**Revelio** used to process WGBS BAM file to be compatible with variant calling software:
 
 * Nunn, Adam, Christian Otto, Mario Fasold, Peter F. Stadler, and David Langenberger. 2022. “Manipulating Base Quality Scores Enables Variant Calling from Bisulfite Sequencing Alignments Using Conventional Bayesian Approaches.” BMC Genomics 23 (1): 477. [[link]](https://doi.org/10.1186/s12864-022-08691-6)
 
@@ -171,19 +171,19 @@ Revelio used to process WGBS BAM file to be compatible with variant calling soft
 
 This list includes other tools that can extract variants from WGBS data and papers comparing among such tools. These tools could be considered as alternatives to the Revelio+FreeBayes approach used in this How To.
 
-MethylExtract contains a function for WGBS variant calling:
+**MethylExtract** contains a function for WGBS variant calling:
 
 * Barturen, Guillermo, Antonio Rueda, José L. Oliver, and Michael Hackenberg. 2013. “MethylExtract: High-Quality Methylation Maps and SNV Calling from Whole Genome Bisulfite Sequencing Data.” F1000Research 2:217. [[link]](https://doi.org/10.12688/f1000research.2-217.v2)
 
-BS-SNPer tool for WGBS variant calling:
+**BS-SNPer** tool for WGBS variant calling:
 
 * Gao, Shengjie, Dan Zou, Likai Mao, Huayu Liu, Pengfei Song, Youguo Chen, Shancen Zhao, et al. 2015. “BS-SNPer: SNP Calling in Bisulfite-Seq Data.” Bioinformatics (Oxford, England) 31 (24): 4006–8. [[link]](https://doi.org/10.1093/bioinformatics/btv507)
 
-CGmapTools contains a function for WGBS variant calling:
+**CGmapTools** contains a function for WGBS variant calling:
 
 * Guo, Weilong, Ping Zhu, Matteo Pellegrini, Michael Q. Zhang, Xiangfeng Wang, and Zhongfu Ni. 2018. “CGmapTools Improves the Precision of Heterozygous SNV Calls and Supports Allele-Specific Methylation Detection and Visualization in Bisulfite-Sequencing Data.” Bioinformatics (Oxford, England) 34 (3): 381–87. [[link]](https://doi.org/10.1093/bioinformatics/btx595)
 
-MethGo contains a function for WGBS variant calling:
+**MethGo** contains a function for WGBS variant calling:
 
 * Liao, Wen-Wei, Ming-Ren Yen, Evaline Ju, Fei-Man Hsu, Larry Lam, and Pao-Yang Chen. 2015. “MethGo: A Comprehensive Tool for Analyzing Whole-Genome Bisulfite Sequencing Data.” BMC Genomics 16 Suppl 12 (Suppl 12): S11. [[link]](https://doi.org/10.1186/1471-2164-16-S12-S11)
 
@@ -191,11 +191,11 @@ Comparison study of various methods for WGBS variant calling:
 
 * Lindner, Melanie, Fleur Gawehns, Sebastiaan Te Molder, Marcel E. Visser, Kees van Oers, and Veronika N. Laine. 2022. “Performance of Methods to Detect Genetic Variants from Bisulphite Sequencing Data in a Non-Model Species.” Molecular Ecology Resources 22 (2): 834–46. [[link]](https://doi.org/10.1111/1755-0998.13493)
 
-Bis-SNP tool for WGBS variant calling:
+**Bis-SNP** tool for WGBS variant calling:
 
 * Liu, Yaping, Kimberly D. Siegmund, Peter W. Laird, and Benjamin P. Berman. 2012. “Bis-SNP: Combined DNA Methylation and SNP Calling for Bisulfite-Seq Data.” Genome Biology 13 (7): R61. [[link]](https://doi.org/10.1186/gb-2012-13-7-r61)
 
-gemBS contains a function for WGBS variant calling:
+**gemBS** contains a function for WGBS variant calling:
 
 * Merkel, Angelika, Marcos Fernández-Callejo, Eloi Casals, Santiago Marco-Sola, Ronald Schuyler, Ivo G. Gut, and Simon C. Heath. 2019. “gemBS: High Throughput Processing for DNA Methylation Data from Bisulfite Sequencing.” Bioinformatics (Oxford, England) 35 (5): 737–42. [[link]](https://doi.org/10.1093/bioinformatics/bty690)
 
@@ -203,6 +203,6 @@ The EpiDiverse Toolkit implements a larger pipeline around the Revelio tool:
 
 * Nunn, Adam, Sultan Nilay Can, Christian Otto, Mario Fasold, Bárbara Díez Rodríguez, Noé Fernández-Pozo, Stefan A. Rensing, Peter F. Stadler, and David Langenberger. 2021. “EpiDiverse Toolkit: A Pipeline Suite for the Analysis of Bisulfite Sequencing Data in Ecological Plant Epigenetics.” NAR Genomics and Bioinformatics 3 (4): lqab106. [[link]](https://doi.org/10.1093/nargab/lqab106)
 
-BISCUIT contains a function for WGBS variant calling:
+**BISCUIT** contains a function for WGBS variant calling:
 
 * Zhou, Wanding, Benjamin K. Johnson, Jacob Morrison, Ian Beddows, James Eapen, Efrat Katsman, Ayush Semwal, et al. 2024. “BISCUIT: An Efficient, Standards-Compliant Tool Suite for Simultaneous Genetic and Epigenetic Inference in Bulk and Single-Cell Studies.” Nucleic Acids Research 52 (6): e32. [[link]](https://doi.org/10.1093/nar/gkae097)
